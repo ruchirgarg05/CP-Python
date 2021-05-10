@@ -1,17 +1,25 @@
-@Configlet(_rtype_=str, _on_default_=None)
-def DIR_reproducer_273284():
-    return get_context().get("DIR_reproducer_273284")
+####################################################################################### Fenwick Tree #######################################################
+# Fenwick tree for zero based arrays. (add +1 to idx in ft update.)
 
-class CTX:
-    def __init__(self, x):
-        self.x = x
-        self.prev_env_var = None
-    def __enter__(self):
-        self.prev_env_var = DIR_reproducer_273284()
-        os.environ["DIR_reproducer_273284"] = self.x
-        return self
-    def __exit__(self, exc_type, exc_value, traceback):
-        if self.prev_env_var:
-            os.environ["DIR_reproducer_273284"] = self.prev_env_var
-            return
-        del os.environ["DIR_reproducer_273284"]
+# implement Binary Index Tree
+def update(index, value, tree, size):
+    index += 1  # index in BIT is 1 more than the original index
+    while index < size:
+        tree[index] += value
+        index += index & -index
+
+def query(index, tree):
+    # return sum of [0, index)
+    result = 0
+    while index >= 1:
+        result += tree[index]
+        index -= index & -index
+    return result
+
+############################################################################ Sorted List ################################################################################
+
+sortedList = []
+for num in nums:
+    position=bisect.bisect_left(sortedList, num) # Position where to insert
+    bisect.insort(sortedList,num)
+    
