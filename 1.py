@@ -196,8 +196,84 @@ class OrderedSet(collections.MutableSet):
             return len(self) == len(other) and list(self) == list(other)
         return set(self) == set(other)
     
-###########################################################################################    
+########################################################################################### UNION FIND ###############################################################
+ 
+ class Union(object):
+    """
+    Usage:
+    
+    islands = Union()
+    for p in map(tuple, positions):
+          islands.add(p)
+          for ne in p.neighbors:
+              unit(ne, p)
+              return isnlands.count
+    """
+    def __init__(self):
+        self.id = {}
+        self.sz = {}
+        self.count = 0
+
+    def add(self, p):
+        self.id[p] = p
+        self.sz[p] = 1
+        self.count += 1
+
+    def root(self, i):
+        while i != self.id[i]:
+            self.id[i] = self.id[self.id[i]]
+            i = self.id[i]
+        return i
+
+    def unite(self, p, q):
+        i, j = self.root(p), self.root(q)
+        if i == j:
+            return
+        if self.sz[i] > self.sz[j]:
+            i, j = j, i
+        self.id[i] = j
+        self.sz[j] += self.sz[i]
+        self.count -= 1
+    
         
+    
+##################################################################################### Djikstras ####################################################################
+import heapq
+
+def calculate_distances(graph, starting_vertex):
+    distances = {vertex: float('infinity') for vertex in graph}
+    distances[starting_vertex] = 0
+
+    pq = [(0, starting_vertex)]
+    while len(pq) > 0:
+        current_distance, current_vertex = heapq.heappop(pq)
+
+        # Nodes can get added to the priority queue multiple times. We only
+        # process a vertex the first time we remove it from the priority queue.
+        if current_distance > distances[current_vertex]:
+            continue
+
+        for neighbor, weight in graph[current_vertex].items():
+            distance = current_distance + weight
+
+            # Only consider this new path if it's better than any path we've
+            # already found.
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(pq, (distance, neighbor))
+
+    return distances
+
+
+example_graph = {
+    'U': {'V': 2, 'W': 5, 'X': 1},
+    'V': {'U': 2, 'X': 2, 'W': 3},
+    'W': {'V': 3, 'U': 5, 'X': 3, 'Y': 1, 'Z': 5},
+    'X': {'U': 1, 'V': 2, 'W': 3, 'Y': 1},
+    'Y': {'X': 1, 'W': 1, 'Z': 1},
+    'Z': {'W': 5, 'Y': 1},
+}
+print(calculate_distances(example_graph, 'X'))
         
  
 
