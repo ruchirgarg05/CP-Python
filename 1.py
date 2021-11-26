@@ -23,6 +23,31 @@ for num in nums:
     position=bisect.bisect_left(sortedList, num) # Position where to insert
     bisect.insort(sortedList,num)
     
+
+####################################################################### Trie ###################################################################################
+class TrieNode:
+    def __init__(self):
+        self.children = defaultdict(TrieNode)
+        self.count = 0
+
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        node = self.root
+        for char in word:
+            node.count+=1
+            node = node.children[char]
+            
+    def find(self, word):
+        node = self.root
+        for i, char in enumerate(word):
+            # Terminating condition
+            # if node.count==1:
+            #    return i
+            node = node.children[char]
     
 ####################################################################### Trie ###################################################################################
 _end = '_end_'
